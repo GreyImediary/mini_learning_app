@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mini_learning_app/colors.dart';
+import 'package:mini_learning_app/ui/screens/login_screen.dart';
+import 'package:mini_learning_app/ui/colors.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,17 +18,17 @@ class MyApp extends StatelessWidget {
         primaryColor: primary,
         fontFamily: 'MINISerif',
         appBarTheme: AppBarTheme(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            textTheme: TextTheme(
-              headline6: TextStyle(
-                color: textMainColor,
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'MINISerif',
-              ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          textTheme: TextTheme(
+            headline6: TextStyle(
+              color: textMainColor,
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'MINISerif',
             ),
-            iconTheme: IconThemeData(),
+          ),
+          iconTheme: IconThemeData(),
         ),
         colorScheme: ColorScheme(
           primary: primary,
@@ -90,12 +92,12 @@ class MyApp extends StatelessWidget {
         cardTheme: CardTheme(
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8)
+              borderRadius: BorderRadius.circular(8)
           ),
         ),
         iconTheme: IconThemeData(color: onSurface),
       ),
-      home: ThemePage(),
+      home: LoginScreens(),
     );
   }
 }
@@ -303,7 +305,8 @@ class ThemePage extends StatelessWidget {
                             ),
                           ),
                         ],
-                      )                    ],
+                      )
+                    ],
                   ),
                 ),
               ],
