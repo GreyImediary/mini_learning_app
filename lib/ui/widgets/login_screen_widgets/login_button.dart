@@ -2,28 +2,54 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class LoginButton extends AnimatedWidget {
+  final double width;
+  final double height;
+
   final VoidCallback onPressed;
   final Animation<double> animation;
 
-  LoginButton({
-    Key? key,
-    required this.animation,
-    required this.onPressed,
-  }) : super(key: key, listenable: animation);
+  final Animatable<BorderRadius> _borderRadiusTween;
+  final Animatable<double> _textOpacityTween;
+  final Animatable<double> _progressIndicatorOpacityTween;
+  final Animatable<double> _widthTween;
 
-  static final _borderRadiusTween = BorderRadiusTween(
-    begin: BorderRadius.circular(16),
-    end: BorderRadius.circular(96),
+  static final _firstAnimationStepCurve = CurveTween(
+    curve: Interval(0, 0.75, curve: Curves.easeInOut),
+  );
+  static final _secondAnimationStepCurve = CurveTween(
+    curve: Interval(0.75, 1, curve: Curves.easeInOut),
   );
 
-  static final _textOpacityTween = Tween<double>(begin: 1.0, end: 0.0);
-
-  static final _progressIndicatorTween = Tween<double>(begin: 0.0, end: 1.0);
+  LoginButton({
+    Key? key,
+    this.width = 360,
+    this.height = 36,
+    required this.animation,
+    required this.onPressed,
+  })   : _textOpacityTween = Tween<double>(
+          begin: 1.0,
+          end: 0.0,
+        ).chain(_firstAnimationStepCurve),
+        _progressIndicatorOpacityTween = Tween<double>(
+          begin: 0,
+          end: 1,
+        ).chain(_secondAnimationStepCurve),
+        _widthTween = Tween<double>(
+          begin: width,
+          end: height,
+        ).chain(_firstAnimationStepCurve),
+        _borderRadiusTween = BorderRadiusTween(
+          begin: BorderRadius.circular(16),
+          end: BorderRadius.circular(height),
+        ).chain(
+          CurveTween(
+            curve: Interval(0.5, 0.75, curve: Curves.easeInOut),
+          ),
+        ),
+        super(key: key, listenable: animation);
 
   @override
   Widget build(BuildContext context) {
-    final _widthTween = Tween<double>(begin: MediaQuery.of(context).size.width, end: 36);
-
     return Material(
       borderRadius: _borderRadiusTween.evaluate(animation),
       color: Theme.of(context).colorScheme.primary,
@@ -34,7 +60,7 @@ class LoginButton extends AnimatedWidget {
         borderRadius: _borderRadiusTween.evaluate(animation),
         child: Container(
           width: _widthTween.evaluate(animation),
-          height: 36,
+          height: height,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -50,7 +76,7 @@ class LoginButton extends AnimatedWidget {
                 ),
               ),
               Opacity(
-                opacity: _progressIndicatorTween.evaluate(animation),
+                opacity: _progressIndicatorOpacityTween.evaluate(animation),
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation(
                     Theme.of(context).colorScheme.secondary,

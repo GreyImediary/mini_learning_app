@@ -10,17 +10,12 @@ class LoginFormPanel extends StatefulWidget {
 class _LoginFormPanelState extends State<LoginFormPanel>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _loginButtonAnimation;
 
   @override
   void initState() {
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 700),
-    );
-    _loginButtonAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
     );
     super.initState();
   }
@@ -56,7 +51,7 @@ class _LoginFormPanelState extends State<LoginFormPanel>
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 64),
           child: LoginButton(
-            animation: _loginButtonAnimation,
+            animation: _controller,
             onPressed: () {
               _controller.forward();
             },
