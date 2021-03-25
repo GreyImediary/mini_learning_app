@@ -13,31 +13,36 @@ class LoginButton extends AnimatedWidget {
   final Animatable<double> _progressIndicatorOpacityTween;
   final Animatable<double> _widthTween;
 
-  static final _firstAnimationStepCurve = CurveTween(
-    curve: Interval(0, 0.75, curve: Curves.easeInOut),
-  );
-  static final _secondAnimationStepCurve = CurveTween(
-    curve: Interval(0.75, 1, curve: Curves.easeInOut),
-  );
-
   LoginButton({
     Key? key,
-    this.width = 360,
+    this.width = 200,
     this.height = 36,
     required this.animation,
     required this.onPressed,
   })   : _textOpacityTween = Tween<double>(
           begin: 1.0,
           end: 0.0,
-        ).chain(_firstAnimationStepCurve),
+        ).chain(
+          CurveTween(
+            curve: Interval(0, 0.75, curve: Curves.easeInOut),
+          ),
+        ),
         _progressIndicatorOpacityTween = Tween<double>(
           begin: 0,
           end: 1,
-        ).chain(_secondAnimationStepCurve),
+        ).chain(
+            CurveTween(
+              curve: Interval(0.75, 1, curve: Curves.easeInOut),
+            ),
+        ),
         _widthTween = Tween<double>(
           begin: width,
           end: height,
-        ).chain(_firstAnimationStepCurve),
+        ).chain(
+            CurveTween(
+              curve: Interval(0, 0.75, curve: Curves.easeInBack),
+            ),
+        ),
         _borderRadiusTween = BorderRadiusTween(
           begin: BorderRadius.circular(16),
           end: BorderRadius.circular(height),
