@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
+          isDense: true
         ),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: primary,
