@@ -150,7 +150,19 @@ class _LoginFormPanelState extends State<LoginFormPanel>
           child: LoginButton(
             animation: _controller,
             onPressed: () {
-              _controller.forward();
+              if (_formKey.currentState!.validate()) {
+                if (_controller.isCompleted) {
+                  _controller.reverse();
+                  setState(() {
+                    _isFormEnabled = true;
+                  });
+                } else {
+                  _controller.forward();
+                  setState(() {
+                    _isFormEnabled = false;
+                  });
+                }
+              }
             },
           ),
         ),

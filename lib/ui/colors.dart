@@ -15,6 +15,7 @@ const onError = Colors.white;
 const brightness = Brightness.light;
 
 const green = Color.fromRGBO(76, 175, 80, 1.0);
+const tagColor = Color.fromRGBO(237, 237, 237, 1.0);
 
 const textMainColor = Color.fromRGBO(28, 28, 28, 0.87);
 const textSecondaryColor = Color.fromRGBO(60, 60, 60, 0.87);
