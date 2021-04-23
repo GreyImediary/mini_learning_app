@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mini_learning_app/ui/widgets/login_screen_widgets/login_form_panel.dart';
 
-class LoginScreens extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +20,9 @@ class LoginScreens extends StatelessWidget {
                 children: [
                   Text(
                     'MINI\nLearning App',
-                    style: Theme.of(context).textTheme.headline3,
+                    style: Theme.of(context).textTheme.headline3?.copyWith(
+                      fontFamily: 'MINISerif'
+                    ),
                   ),
                   Container(
                     child: LoginFormPanel(),

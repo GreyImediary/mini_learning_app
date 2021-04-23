@@ -31,7 +31,7 @@ class Tag extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText1
-                  ?.copyWith(fontSize: 12, fontFamily: 'MINISansSerifCYR'),
+                  ?.copyWith(fontSize: 12),
             ),
           ),
         ),

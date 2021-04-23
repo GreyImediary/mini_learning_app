@@ -52,15 +52,11 @@ flutter:
     - family: MINISerif
       fonts:
         - asset: fonts/MINISerif-Regular.otf
-        - asset: fonts/MINISerif-Italic.otf
-          style: italic
-        - asset: fonts/MINISerif-Medium.otf
-          weight: 500
-        - asset: fonts/MINISerif-Bold.otf
-          weight: 700
-    - family: MINISansSerifCYR
+    - family: MINIType
       fonts:
-        - asset: fonts/MINISansSerifCYR-Regular.ttf
+        - asset: fonts/MINIType-Regular.ttf
+        - asset: fonts/MINIType-Bold.ttf
+          weight: 700
   assets:
      - assets/mini_logo.svg
      - assets/mini_logo.png

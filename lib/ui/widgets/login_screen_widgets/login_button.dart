@@ -31,17 +31,17 @@ class LoginButton extends AnimatedWidget {
           begin: 0,
           end: 1,
         ).chain(
-            CurveTween(
-              curve: Interval(0.75, 1, curve: Curves.easeInOut),
-            ),
+          CurveTween(
+            curve: Interval(0.75, 1, curve: Curves.easeInOut),
+          ),
         ),
         _widthTween = Tween<double>(
           begin: width,
           end: height,
         ).chain(
-            CurveTween(
-              curve: Interval(0, 0.75, curve: Curves.easeInBack),
-            ),
+          CurveTween(
+            curve: Interval(0, 0.75, curve: Curves.easeInBack),
+          ),
         ),
         _borderRadiusTween = BorderRadiusTween(
           begin: BorderRadius.circular(16),
@@ -75,7 +75,6 @@ class LoginButton extends AnimatedWidget {
                   'ВОЙТИ',
                   style: Theme.of(context).textTheme.button?.copyWith(
                         color: Colors.white,
-                        fontFamily: 'MINISansSerifCYR',
                       ),
                   textAlign: TextAlign.center,
                 ),

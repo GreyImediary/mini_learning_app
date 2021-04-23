@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'MINI Learning App',
       theme: ThemeData(
         primaryColor: primary,
-        fontFamily: 'MINISerif',
+        fontFamily: 'MINIType',
         appBarTheme: AppBarTheme(
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
               color: textMainColor,
               fontSize: 24,
               fontWeight: FontWeight.w500,
-              fontFamily: 'MINISerif',
+              fontFamily: 'MINIType',
             ),
           ),
           iconTheme: IconThemeData(),
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               textStyle: TextStyle(
-                  fontFamily: 'MINISansSerifCYR', fontWeight: FontWeight.w500)),
+                  fontFamily: 'MINIType', fontWeight: FontWeight.w500)),
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
               ),
               side: BorderSide(color: primary),
               textStyle: TextStyle(
-                  fontFamily: 'MINISansSerifCYR', fontWeight: FontWeight.w500)),
+                  fontFamily: 'MINIType', fontWeight: FontWeight.w500)),
         ),
         cardTheme: CardTheme(
           elevation: 4,
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: IconThemeData(color: onSurface),
       ),
-      home: LoginScreens(),
+      home: LoginScreen(),
     );
   }
 }
