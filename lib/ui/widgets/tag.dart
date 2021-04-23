@@ -25,7 +25,8 @@ class Tag extends StatelessWidget {
             padding: EdgeInsets.all(8),
             child: Text(
               text,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.fade,
+              softWrap: false,
               textAlign: TextAlign.center,
               maxLines: 1,
               style: Theme.of(context)

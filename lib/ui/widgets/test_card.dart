@@ -88,7 +88,7 @@ class _TestCardState extends State<TestCard>
                       style: Theme.of(context)
                           .textTheme
                           .subtitle2
-                          ?.copyWith(fontSize: 18),
+                          ?.copyWith(fontSize: 16),
                     ),
                     const SizedBox(height: 8),
                     Row(
