@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mini_learning_app/ui/colors.dart';
+import 'package:mini_learning_app/ui/widgets/tag_button.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:mini_learning_app/ui/widgets/tag.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -29,12 +30,6 @@ class _TestCardState extends State<TestCard>
         .chain(CurveTween(curve: Curves.fastOutSlowIn))
         .animate(_controller);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -85,10 +80,7 @@ class _TestCardState extends State<TestCard>
                   children: [
                     Text(
                       'Название теста',
-                      style: Theme.of(context)
-                          .textTheme
-                          .subtitle2
-                          ?.copyWith(fontSize: 16),
+                      style: Theme.of(context).textTheme.subtitle2
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -168,33 +160,10 @@ class _TestCardState extends State<TestCard>
       ),
     );
   }
-}
-
-class TagButton extends StatelessWidget {
-  final Animation<double> rotationAnimation;
-  final VoidCallback? onTap;
-
-  TagButton({required this.rotationAnimation, this.onTap});
 
   @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(10),
-      color: Color.fromRGBO(237, 237, 237, 1.0),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: onTap,
-        child: Container(
-          child: RotationTransition(
-            turns: rotationAnimation,
-            child: Icon(
-              Icons.arrow_drop_down,
-              size: 30,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-      ),
-    );
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
