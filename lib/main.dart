@@ -1,106 +1,26 @@
 // @dart=2.9
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mini_learning_app/ui/screens/login_screen.dart';
-import 'package:mini_learning_app/ui/colors.dart';
+import 'package:mini_learning_app/bloc/user/user_repository.dart';
+import 'package:mini_learning_app/ui/app.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'bloc/auth/auth_repository.dart';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MINI Learning App',
-      theme: ThemeData(
-        primaryColor: primary,
-        fontFamily: 'MINIType',
-        appBarTheme: AppBarTheme(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          textTheme: TextTheme(
-            headline6: TextStyle(
-              color: textMainColor,
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'MINIType',
-            ),
-          ),
-          iconTheme: IconThemeData(),
-        ),
-        colorScheme: ColorScheme(
-          primary: primary,
-          primaryVariant: primaryVariant,
-          secondary: secondary,
-          secondaryVariant: secondaryVariant,
-          surface: surface,
-          background: background,
-          error: error,
-          onPrimary: onPrimary,
-          onSecondary: onSecondary,
-          onSurface: onSurface,
-          onBackground: onBackground,
-          onError: onError,
-          brightness: brightness,
-        ),
-        textTheme: TextTheme(
-          headline3: TextStyle(
-            fontSize: 48,
-            color: textMainColor,
-          ),
-          headline5: TextStyle(
-              color: textMainColor, fontSize: 24, fontWeight: FontWeight.bold),
-          headline6: TextStyle(
-              color: textMainColor, fontSize: 20, fontWeight: FontWeight.w500),
-          subtitle1: TextStyle(
-            color: textMainColor,
-            fontSize: 16,
-          ),
-          subtitle2: TextStyle(
-              color: textMainColor, fontSize: 14, fontWeight: FontWeight.w500),
-          bodyText2: TextStyle(color: textMainColor, fontSize: 16),
-          bodyText1: TextStyle(fontSize: 14, color: textSecondaryColor),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          isDense: true
-        ),
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: primary,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              textStyle: TextStyle(
-                  fontFamily: 'MINIType', fontWeight: FontWeight.w500)),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              side: BorderSide(color: primary),
-              textStyle: TextStyle(
-                  fontFamily: 'MINIType', fontWeight: FontWeight.w500)),
-        ),
-        cardTheme: CardTheme(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8)
-          ),
-        ),
-        iconTheme: IconThemeData(color: onSurface),
-      ),
-      home: LoginScreen(),
-    );
-  }
+void main() async {
+  final dio = Dio()..options.baseUrl = 'http://192.168.0.10:3000';
+  final tokenDio = Dio()..options.baseUrl = 'http://192.168.0.10:3000';
+
+  final authRepository = AuthRepository(dio, tokenDio);
+  final userRepository = UserRepository(dio);
+
+  runApp(App(
+    authRepository: authRepository,
+    userRepository: userRepository,
+  ));
+
+  authRepository.checkAuth();
 }
 
 class ThemePage extends StatelessWidget {
@@ -191,7 +111,9 @@ class ThemePage extends StatelessWidget {
                   'Hello world',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Container(height: 16,),
+                Container(
+                  height: 16,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 32.0),
                   child: Column(
@@ -247,11 +169,9 @@ class ThemePage extends StatelessWidget {
                                   BoxShadow(
                                       color: Color.fromRGBO(0, 0, 0, 0.25),
                                       offset: Offset(0, 3),
-                                      blurRadius: 4
-                                  ),
+                                      blurRadius: 4),
                                 ],
-                                borderRadius: BorderRadius.circular(8)
-                            ),
+                                borderRadius: BorderRadius.circular(8)),
                           ),
                           Container(
                             width: 156,
@@ -263,11 +183,9 @@ class ThemePage extends StatelessWidget {
                                   BoxShadow(
                                       color: Color.fromRGBO(0, 0, 0, 0.25),
                                       offset: Offset(0, 3),
-                                      blurRadius: 4
-                                  ),
+                                      blurRadius: 4),
                                 ],
-                                borderRadius: BorderRadius.circular(8)
-                            ),
+                                borderRadius: BorderRadius.circular(8)),
                           ),
                         ],
                       ),
@@ -283,11 +201,9 @@ class ThemePage extends StatelessWidget {
                                   BoxShadow(
                                       color: Color.fromRGBO(0, 0, 0, 0.25),
                                       offset: Offset(0, 3),
-                                      blurRadius: 4
-                                  ),
+                                      blurRadius: 4),
                                 ],
-                                borderRadius: BorderRadius.circular(8)
-                            ),
+                                borderRadius: BorderRadius.circular(8)),
                           ),
                           Container(
                             width: 156,
@@ -299,11 +215,9 @@ class ThemePage extends StatelessWidget {
                                   BoxShadow(
                                       color: Color.fromRGBO(0, 0, 0, 0.25),
                                       offset: Offset(0, 3),
-                                      blurRadius: 4
-                                  ),
+                                      blurRadius: 4),
                                 ],
-                                borderRadius: BorderRadius.circular(8)
-                            ),
+                                borderRadius: BorderRadius.circular(8)),
                           ),
                         ],
                       )

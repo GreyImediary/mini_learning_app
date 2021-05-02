@@ -3,10 +3,16 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mini_learning_app/model/token/token.dart';
-import 'package:mini_learning_app/pref_constants.dart';
+import 'package:mini_learning_app/shared_preferences/pref_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum AuthStatus { unknown, authenticated, unauthenticated, loginError, refreshError }
+enum AuthStatus {
+  unknown,
+  authenticated,
+  unauthenticated,
+  loginError,
+  refreshError
+}
 
 class AuthRepository {
   final Dio dio;
@@ -86,15 +92,6 @@ class AuthRepository {
     }
   }
 
-  Future<void> _saveToPrefs(Token token) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    prefs.setString(PrefConst.refreshToken, token.refreshToken);
-
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token.accessToken);
-    prefs.setInt(PrefConst.userId, decodedToken['sub'] as int);
-  }
-
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
     final options = new Options(
       method: requestOptions.method,
@@ -104,6 +101,36 @@ class AuthRepository {
         data: requestOptions.data,
         queryParameters: requestOptions.queryParameters,
         options: options);
+  }
+
+  Future<void> _saveToPrefs(Token token) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    print('ACCESS ${token.accessToken}');
+    print('REFRESH ${token.refreshToken}');
+
+    prefs.setString(PrefConst.refreshToken, token.refreshToken);
+
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token.accessToken);
+    prefs.setInt(PrefConst.userId, decodedToken['sub'] as int);
+  }
+
+  Future<void> checkAuth() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final token = prefs.getString(PrefConst.refreshToken);
+    final isUserLogged =  token != null &&
+        prefs.getInt(PrefConst.userId) != null;
+
+    if (isUserLogged) {
+      if (!JwtDecoder.isExpired(token!)) {
+        _controller.add(AuthStatus.authenticated);
+      } else {
+        _controller.add(AuthStatus.refreshError);
+      }
+    } else {
+      _controller.add(AuthStatus.unauthenticated);
+    }
   }
 
   void dispose() => _controller.close();

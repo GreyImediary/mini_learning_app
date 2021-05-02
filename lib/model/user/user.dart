@@ -9,7 +9,7 @@ class User {
   final String lastName;
   final String email;
   final String company;
-  final double rating;
+  final double? rating;
   final int finishedArticles;
   final int finishedTests;
   final int favoriteArticles;

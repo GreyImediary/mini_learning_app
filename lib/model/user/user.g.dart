@@ -13,7 +13,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
     json['lastName'] as String,
     json['email'] as String,
     json['company'] as String,
-    (json['rating'] as num).toDouble(),
+    (json['rating'] as num?)?.toDouble(),
     json['finishedArticles'] as int,
     json['finishedTests'] as int,
     json['favoriteArticles'] as int,

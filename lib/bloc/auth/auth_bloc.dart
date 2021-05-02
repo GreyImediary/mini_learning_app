@@ -5,7 +5,7 @@ import 'package:mini_learning_app/bloc/auth/auth_event.dart';
 import 'package:mini_learning_app/bloc/auth/auth_repository.dart';
 import 'package:mini_learning_app/bloc/auth/auth_state.dart';
 import 'package:mini_learning_app/bloc/user/user_repository.dart';
-import 'package:mini_learning_app/pref_constants.dart';
+import 'package:mini_learning_app/shared_preferences/pref_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -50,7 +50,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           );
         }
       case AuthStatus.unauthenticated:
-        return AuthInitial();
+        return AuthLogin();
       case AuthStatus.loginError:
         return AuthFailure(
             'Не удаётся войти. Пожалуйста, проверьте правильность ввода почты и пароля.',
