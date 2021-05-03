@@ -85,4 +85,9 @@ final theme = ThemeData(
     ),
   ),
   iconTheme: IconThemeData(color: onSurface),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    elevation: 0,
+    unselectedItemColor: Color.fromRGBO(255, 255, 255, 0.38),
+    selectedItemColor: Colors.white,
+  ),
 );

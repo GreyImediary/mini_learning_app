@@ -38,6 +38,7 @@ dependencies:
   equatable: ^2.0.0
   flutter_bloc: ^7.0.0
   jwt_decoder: ^2.0.1
+  bottom_bar_page_transition: ^2.0.0
 
 dev_dependencies:
   build_runner: ^2.0.1
