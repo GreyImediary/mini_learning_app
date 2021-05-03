@@ -4,16 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mini_learning_app/bloc/user/user_repository.dart';
+import 'package:mini_learning_app/dio_client.dart';
 import 'package:mini_learning_app/ui/app.dart';
 
 import 'bloc/auth/auth_repository.dart';
 
 void main() async {
-  final dio = Dio()..options.baseUrl = 'http://192.168.0.10:3000';
-  final tokenDio = Dio()..options.baseUrl = 'http://192.168.0.10:3000';
 
-  final authRepository = AuthRepository(dio, tokenDio);
-  final userRepository = UserRepository(dio);
+  final authRepository = AuthRepository(DioClient.dio, DioClient.tokenDio);
+  final userRepository = UserRepository(DioClient.dio);
 
   runApp(App(
     authRepository: authRepository,
