@@ -50,6 +50,10 @@ class _LoginFormPanelState extends State<LoginFormPanel>
       listener: (context, state) {
         if (state is AuthFailure || state is AuthSuccess) {
           _controller.reverse();
+
+          setState(() {
+            _isFormEnabled = !_isFormEnabled;
+          });
         }
       },
       child: Column(
@@ -165,9 +169,15 @@ class _LoginFormPanelState extends State<LoginFormPanel>
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _controller.forward();
+
+                  setState(() {
+                    _isFormEnabled = !_isFormEnabled;
+                  });
+
                   context
                       .read<AuthRepository>()
                       .login(_emailController.text, _passController.text);
+
                 }
               },
             ),
