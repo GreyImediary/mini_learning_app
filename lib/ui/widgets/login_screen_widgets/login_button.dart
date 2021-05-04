@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mini_learning_app/ui/widgets/ThemedProgressIndicator.dart';
 
 class LoginButton extends AnimatedWidget {
   final double width;
@@ -81,11 +82,7 @@ class LoginButton extends AnimatedWidget {
               ),
               Opacity(
                 opacity: _progressIndicatorOpacityTween.evaluate(animation),
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(
-                    Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
+                child: ThemedProgressIndicator(),
               )
             ],
           ),
