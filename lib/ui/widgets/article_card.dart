@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mini_learning_app/model/article/article.dart';
+import 'package:mini_learning_app/model/tag/tag.dart';
 import 'package:mini_learning_app/ui/widgets/tag.dart';
 import 'package:mini_learning_app/ui/widgets/tag_button.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ArticleCard extends StatefulWidget {
-  final bool isNews;
+  final Article article;
 
-  ArticleCard(this.isNews);
+  ArticleCard(this.article);
 
   @override
   _ArticleCardState createState() => _ArticleCardState();
@@ -35,6 +37,7 @@ class _ArticleCardState extends State<ArticleCard>
 
   @override
   Widget build(BuildContext context) {
+    final article = widget.article;
     return Material(
       borderRadius: BorderRadius.circular(8),
       elevation: 2,
@@ -65,8 +68,7 @@ class _ArticleCardState extends State<ArticleCard>
                     ),
                     FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image:
-                      'https://images.drive.ru/i/0/59786698ec05c4365e000006.jpg',
+                      image: article.imageUrl,
                       fit: BoxFit.cover,
                       height: 100,
                       fadeInDuration: Duration(milliseconds: 400),
@@ -75,106 +77,35 @@ class _ArticleCardState extends State<ArticleCard>
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(
-                  top: 8,
-                  left: 8,
-                  right: 8,
-                  bottom: widget.isNews ? 16 : 8
-                ),
+                padding: EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Название статьи',
+                      article.title,
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Супер пупер описание статьи на несколько строк раз два три четыре',
+                      article.content,
                       style: Theme.of(context).textTheme.bodyText1,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tag(
-                              text: 'Ты',
-                              onTap: () {},
-                            ),
-                          ),
+                    _buildTags(article.tags),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        splashRadius: 20,
+                        icon: Icon(
+                          Icons.bookmark_outline,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tag(
-                              text: 'Очень длинный тэг',
-                              onTap: () {},
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tag(
-                              text: 'Ты',
-                              onTap: () {},
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Tag(
-                              text: 'Очень длинный тэг',
-                              onTap: () {},
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: TagButton(
-                            rotationAnimation: _rotationAnimation,
-                            onTap: () {
-                              if (_controller.status ==
-                                  AnimationStatus.completed) {
-                                _controller.reverse();
-                              } else {
-                                _controller.forward();
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    SizeTransition(
-                      sizeFactor: _sizeAnimation,
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          Tag(text: 'Привет'),
-                          Tag(text: 'Я тэг'),
-                          Tag(text: 'Дргуой тэг'),
-                          Tag(text: 'Я очень длинный тэг'),
-                          Tag(text: 'Я очень длинный тэг'),
-                        ],
+                        onPressed: () {},
                       ),
-                    ),
-                    if (!widget.isNews)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          splashRadius: 20,
-                          icon: Icon(
-                            Icons.bookmark_outline,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          onPressed: () {},
-                        ),
-                      )
+                    )
                   ],
                 ),
               )
@@ -182,6 +113,68 @@ class _ArticleCardState extends State<ArticleCard>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTags(List<Tag> tags) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            if (tags.length > 4)
+              ...tags
+                  .sublist(0, 4)
+                  .map(
+                    (tag) => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: TagWidget(text: tag.text, onTap: () {},),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            if (tags.length <= 4)
+              ...tags
+                  .map(
+                    (tag) => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: TagWidget(text: tag.text, onTap: () {},),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            if (tags.length > 4)
+              Expanded(
+                child: TagButton(
+                  rotationAnimation: _rotationAnimation,
+                  onTap: () {
+                    if (_controller.status == AnimationStatus.completed) {
+                      _controller.reverse();
+                    } else {
+                      _controller.forward();
+                    }
+                  },
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (tags.length > 4)
+          SizeTransition(
+            sizeFactor: _sizeAnimation,
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ...tags.sublist(4, tags.length).map(
+                      (tag) => TagWidget(text: tag.text, onTap: () {},),
+                    ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 
