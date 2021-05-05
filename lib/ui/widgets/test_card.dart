@@ -86,7 +86,7 @@ class _TestCardState extends State<TestCard>
                     Row(
                       children: [
                         Expanded(
-                          child: Tag(
+                          child: TagWidget(
                             text: 'Ты',
                             onTap: () {},
                           ),
@@ -95,7 +95,7 @@ class _TestCardState extends State<TestCard>
                           width: 8,
                         ),
                         Expanded(
-                          child: Tag(
+                          child: TagWidget(
                             text: 'Очень длинный тэг',
                             onTap: () {},
                           ),
@@ -123,10 +123,10 @@ class _TestCardState extends State<TestCard>
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          Tag(text: 'Привет'),
-                          Tag(text: 'Я тэг'),
-                          Tag(text: 'Дргуой тэг'),
-                          Tag(text: 'Я длинн')
+                          TagWidget(text: 'Привет'),
+                          TagWidget(text: 'Я тэг'),
+                          TagWidget(text: 'Дргуой тэг'),
+                          TagWidget(text: 'Я длинн')
                         ],
                       ),
                     ),

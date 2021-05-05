@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mini_learning_app/ui/colors.dart';
 
-class Tag extends StatelessWidget {
+class TagWidget extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;
 
-  Tag({
+  TagWidget({
     required this.text,
     this.onTap,
   });

@@ -9,6 +9,14 @@ import 'package:mini_learning_app/ui/screens/profile_screen.dart';
 import 'package:mini_learning_app/ui/screens/test_screen.dart';
 
 class MainScreen extends StatefulWidget {
+  final _screenList = [
+    ExerciseScreen(),
+    TestScreen(),
+    ArticleScreen(),
+    NewsScreen(),
+    ProfileScreen(),
+  ];
+
   static Route route() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => MainScreen(),
@@ -27,20 +35,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 2;
-  final _screenList = [
-    ExerciseScreen(),
-    TestScreen(),
-    ArticleScreen(),
-    NewsScreen(),
-    ProfileScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: BottomBarPageTransition(
-          builder: (context, index) => _screenList[index],
+          builder: (context, index) => widget._screenList[index],
           currentIndex: _currentIndex,
           totalLength: 5,
           transitionType: TransitionType.fade,

@@ -39,6 +39,7 @@ dependencies:
   flutter_bloc: ^7.0.0
   jwt_decoder: ^2.0.1
   bottom_bar_page_transition: ^2.0.0
+  pull_to_refresh: ^1.6.5
 
 dev_dependencies:
   build_runner: ^2.0.1
