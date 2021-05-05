@@ -89,7 +89,7 @@ class _ArticleCardState extends State<ArticleCard>
                     Text(
                       article.content,
                       style: Theme.of(context).textTheme.bodyText1,
-                      maxLines: 2,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
@@ -137,7 +137,7 @@ class _ArticleCardState extends State<ArticleCard>
             if (tags.length <= 4)
               ...tags
                   .map(
-                    (tag) => Expanded(
+                    (tag) => Flexible(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: TagWidget(text: tag.text, onTap: () {},),
