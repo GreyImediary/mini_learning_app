@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mini_learning_app/model/article/article.dart';
 import 'package:mini_learning_app/model/tag/tag.dart';
+import 'package:mini_learning_app/ui/screens/article_detailed_screen.dart';
 import 'package:mini_learning_app/ui/widgets/tag.dart';
 import 'package:mini_learning_app/ui/widgets/tag_button.dart';
 import 'package:shimmer/shimmer.dart';
@@ -44,7 +45,16 @@ class _ArticleCardState extends State<ArticleCard>
       color: Theme.of(context).colorScheme.surface,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return ArticleDetailedScreen(article);
+              },
+            ),
+          );
+        },
         child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -129,7 +139,10 @@ class _ArticleCardState extends State<ArticleCard>
                     (tag) => Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: TagWidget(text: tag.text, onTap: () {},),
+                        child: TagWidget(
+                          text: tag.text,
+                          onTap: () {},
+                        ),
                       ),
                     ),
                   )
@@ -140,7 +153,10 @@ class _ArticleCardState extends State<ArticleCard>
                     (tag) => Flexible(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: TagWidget(text: tag.text, onTap: () {},),
+                        child: TagWidget(
+                          text: tag.text,
+                          onTap: () {},
+                        ),
                       ),
                     ),
                   )
@@ -169,7 +185,10 @@ class _ArticleCardState extends State<ArticleCard>
               runSpacing: 8,
               children: [
                 ...tags.sublist(4, tags.length).map(
-                      (tag) => TagWidget(text: tag.text, onTap: () {},),
+                      (tag) => TagWidget(
+                        text: tag.text,
+                        onTap: () {},
+                      ),
                     ),
               ],
             ),
