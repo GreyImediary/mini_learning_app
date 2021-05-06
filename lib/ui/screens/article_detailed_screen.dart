@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mini_learning_app/model/article/article.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ArticleDetailedScreen extends StatefulWidget {
@@ -25,7 +24,12 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
     print(widget.article.video);
     if (widget.article.video != null) {
       final videoId = YoutubePlayer.convertUrlToId(widget.article.video!);
-      _controller = YoutubePlayerController(initialVideoId: videoId!);
+      _controller = YoutubePlayerController(
+        initialVideoId: videoId!,
+        flags: YoutubePlayerFlags(
+          autoPlay: false,
+        ),
+      );
     }
     super.initState();
   }
@@ -33,8 +37,14 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
+        body: YoutubePlayerBuilder(
+      player: YoutubePlayer(
+        controller: _controller,
+        showVideoProgressIndicator: true,
+        progressIndicatorColor: Theme.of(context).colorScheme.secondary,
+      ),
+      builder: (context, player) {
+        return ListView(children: [
           Container(
             height: 164,
             child: Stack(
@@ -96,14 +106,10 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
             ),
           ),
           if (widget.article.video != null)
-            YoutubePlayer(
-              controller: _controller,
-              showVideoProgressIndicator: true,
-              progressIndicatorColor: Theme.of(context).colorScheme.secondary,
-            ),
+            player,
           Html(data: widget.article.content),
-        ],
-      ),
-    );
+        ]);
+      },
+    ));
   }
 }
