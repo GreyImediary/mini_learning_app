@@ -5,8 +5,6 @@ import 'package:mini_learning_app/bloc/auth/auth_event.dart';
 import 'package:mini_learning_app/bloc/auth/auth_repository.dart';
 import 'package:mini_learning_app/bloc/auth/auth_state.dart';
 import 'package:mini_learning_app/bloc/user/user_repository.dart';
-import 'package:mini_learning_app/shared_preferences/pref_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository _userRepository;
@@ -37,9 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case AuthStatus.unknown:
         return AuthInitial();
       case AuthStatus.authenticated:
-        final prefs = await SharedPreferences.getInstance();
-        int userId = prefs.getInt(PrefConst.userId) ?? -1;
-        final user = await _userRepository.getUserById(userId);
+        final user = await _userRepository.getCurrentUser();
         
         if (user != null) {
           return AuthSuccess(user);

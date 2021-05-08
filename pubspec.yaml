@@ -70,6 +70,7 @@ flutter:
   assets:
      - assets/mini_logo.svg
      - assets/mini_logo.png
+     - assets/defaultProfile.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
