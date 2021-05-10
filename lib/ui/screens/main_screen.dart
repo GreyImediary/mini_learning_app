@@ -1,6 +1,9 @@
 import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_learning_app/bloc/user/user_bloc.dart';
+import 'package:mini_learning_app/bloc/user/user_repository.dart';
 import 'package:mini_learning_app/ui/colors.dart';
 import 'package:mini_learning_app/ui/screens/article_screen.dart';
 import 'package:mini_learning_app/ui/screens/exercise_screen.dart';
@@ -39,12 +42,15 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: BottomBarPageTransition(
-          builder: (context, index) => widget._screenList[index],
-          currentIndex: _currentIndex,
-          totalLength: 5,
-          transitionType: TransitionType.fade,
+      body: BlocProvider(
+        create: (BuildContext context) => UserBloc(context.read<UserRepository>()),
+        child: SafeArea(
+          child: BottomBarPageTransition(
+            builder: (context, index) => widget._screenList[index],
+            currentIndex: _currentIndex,
+            totalLength: 5,
+            transitionType: TransitionType.fade,
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

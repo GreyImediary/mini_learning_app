@@ -13,7 +13,7 @@ class DioClient {
   static Dio getDio() {
     if (_dio == null) {
       _dio = Dio()
-        ..options.baseUrl = 'http://192.168.0.10:3000'
+        ..options.baseUrl = 'http://192.168.0.15:3000'
         ..interceptors.add(LogInterceptor())
         ..interceptors.add(
           InterceptorsWrapper(

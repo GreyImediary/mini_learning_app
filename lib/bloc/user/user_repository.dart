@@ -27,6 +27,23 @@ class UserRepository {
     }
   }
 
+  Future<bool> saveToFavorite(int articleId) async {
+    try {
+      if (_user != null) {
+        final response = await dio.post(
+            '/user/${_user!.id}/articles/favorite/$articleId');
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          return true;
+        }
+      }
+
+      return false;
+    } on DioError {
+      return false;
+    }
+  }
+
   Future<User?> getCurrentUser() async {
       final prefs = await SharedPreferences.getInstance();
       int userId = prefs.getInt(PrefConst.userId) ?? -1;

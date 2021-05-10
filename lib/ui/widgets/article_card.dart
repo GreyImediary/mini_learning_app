@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_learning_app/bloc/user/user_bloc.dart';
+import 'package:mini_learning_app/bloc/user/user_event.dart';
+import 'package:mini_learning_app/bloc/user/user_state.dart';
 import 'package:mini_learning_app/model/article/article.dart';
 import 'package:mini_learning_app/model/tag/tag.dart';
 import 'package:mini_learning_app/ui/screens/article_detailed_screen.dart';
@@ -33,93 +37,116 @@ class _ArticleCardState extends State<ArticleCard>
     _rotationAnimation = Tween<double>(begin: 0, end: 0.5)
         .chain(CurveTween(curve: Curves.fastOutSlowIn))
         .animate(_controller);
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final article = widget.article;
-    return Material(
-      borderRadius: BorderRadius.circular(8),
-      elevation: 2,
-      color: Theme.of(context).colorScheme.surface,
-      child: InkWell(
+    return BlocListener<UserBloc, UserState>(
+      listener: (_, state) {
+        if (state is UserArticleSaveSuccess &&
+            article.id == state.articleId) {
+          setState(() {
+            article.isFavoriteForCurrent = true;
+          });
+        } else if (state is UserArticleSaveFail) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Не удалось сохранить статью :(')));
+        }
+      },
+      child: Material(
         borderRadius: BorderRadius.circular(8),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return ArticleDetailedScreen(article);
-              },
-            ),
-          );
-        },
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                child: Stack(
-                  fit: StackFit.passthrough,
-                  children: [
-                    Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        color: Colors.green,
-                        height: 100,
-                      ),
-                    ),
-                    FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: article.imageUrl,
-                      fit: BoxFit.cover,
-                      height: 100,
-                      fadeInDuration: Duration(milliseconds: 400),
-                    )
-                  ],
-                ),
+        elevation: 2,
+        color: Theme.of(context).colorScheme.surface,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) {
+                  return BlocProvider.value(
+                      value: context.read<UserBloc>(),
+                      child: ArticleDetailedScreen(article));
+                },
               ),
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      article.title,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      article.content,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    _buildTags(article.tags),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        splashRadius: 20,
-                        icon: Icon(
-                          Icons.bookmark_outline,
-                          color: Theme.of(context).colorScheme.primary,
+            );
+          },
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    children: [
+                      Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          color: Colors.green,
+                          height: 100,
                         ),
-                        onPressed: () {},
                       ),
-                    )
-                  ],
+                      FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: article.imageUrl,
+                        fit: BoxFit.cover,
+                        height: 100,
+                        fadeInDuration: Duration(milliseconds: 400),
+                      )
+                    ],
+                  ),
                 ),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        article.title,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        article.content,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+                      _buildTags(article.tags),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          splashRadius: 20,
+                          icon: Icon(
+                            article.isFavoriteForCurrent
+                                ? Icons.bookmark
+                                : Icons.bookmark_outline,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          onPressed: () {
+                            context
+                                .read<UserBloc>()
+                                .add(UserArticleSaved(article.id));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
