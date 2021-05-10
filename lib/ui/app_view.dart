@@ -4,6 +4,7 @@ import 'package:mini_learning_app/bloc/auth/auth_bloc.dart';
 import 'package:mini_learning_app/bloc/auth/auth_event.dart';
 import 'package:mini_learning_app/bloc/auth/auth_repository.dart';
 import 'package:mini_learning_app/bloc/auth/auth_state.dart';
+import 'package:mini_learning_app/help_functions/snack_bar_helpers.dart';
 import 'package:mini_learning_app/ui/screens/login_screen.dart';
 import 'package:mini_learning_app/ui/screens/main_screen.dart';
 import 'package:mini_learning_app/ui/screens/splash_screen.dart';
@@ -54,27 +55,18 @@ class _AppViewState extends State<AppView> {
   _handleError(BuildContext context, String message, AuthStatus status) {
     switch (status) {
       case AuthStatus.unauthenticated:
-        _showMessageSnackBar(context, message);
+        showSimpleSnackBar(context, message);
         context.read<AuthBloc>().add(AuthStatusChanged(status));
         break;
       case AuthStatus.loginError:
-        _showMessageSnackBar(context, message);
+        showSimpleSnackBar(context, message);
         break;
       case AuthStatus.refreshError:
-        _showMessageSnackBar(context, message);
+        showSimpleSnackBar(context, message);
         context.read<AuthBloc>().add(AuthStatusChanged(AuthStatus.unauthenticated,));
         break;
       default:
         break;
     }
-  }
-
-  _showMessageSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
   }
 }
