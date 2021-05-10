@@ -11,13 +11,29 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {
     if (event is UserArticleSaved) {
-      final isArticleSaved = await userRepository.saveToFavorite(event.articleId);
+      yield await _saveToFavorites(event.articleId);
+    } else if (event is UserArticleDeleted) {
+      yield await _deleteFromFavorites(event.articleId);
+    }
+  }
 
-      if (isArticleSaved) {
-        yield UserArticleSaveSuccess(event.articleId);
-      } else {
-        yield UserArticleSaveFail();
-      }
+  Future<UserState> _saveToFavorites(int articleId) async {
+    final isArticleSaved = await userRepository.saveToFavorite(articleId);
+
+    if (isArticleSaved) {
+      return UserArticleSaveSuccess(articleId);
+    } else {
+      return UserArticleSaveFail();
+    }
+  }
+
+  Future<UserState> _deleteFromFavorites(int articleId) async {
+    final isArticleDeleted = await userRepository.deleteFromFavorites(articleId);
+
+    if (isArticleDeleted) {
+      return UserArticleDeleteSuccess(articleId);
+    } else {
+      return UserArticleDeleteFail();
     }
   }
 }

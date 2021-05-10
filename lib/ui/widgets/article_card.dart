@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_learning_app/bloc/user/user_bloc.dart';
 import 'package:mini_learning_app/bloc/user/user_event.dart';
 import 'package:mini_learning_app/bloc/user/user_state.dart';
+import 'package:mini_learning_app/help_functions/snack_bar_helpers.dart';
 import 'package:mini_learning_app/model/article/article.dart';
 import 'package:mini_learning_app/model/tag/tag.dart';
 import 'package:mini_learning_app/ui/screens/article_detailed_screen.dart';
@@ -46,16 +47,7 @@ class _ArticleCardState extends State<ArticleCard>
     final article = widget.article;
     return BlocListener<UserBloc, UserState>(
       listener: (_, state) {
-        if (state is UserArticleSaveSuccess &&
-            article.id == state.articleId) {
-          setState(() {
-            article.isFavoriteForCurrent = true;
-          });
-        } else if (state is UserArticleSaveFail) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Не удалось сохранить статью :(')));
-        }
+        _listenUserBloc(state, article);
       },
       child: Material(
         borderRadius: BorderRadius.circular(8),
@@ -136,9 +128,15 @@ class _ArticleCardState extends State<ArticleCard>
                             color: Theme.of(context).colorScheme.primary,
                           ),
                           onPressed: () {
-                            context
-                                .read<UserBloc>()
-                                .add(UserArticleSaved(article.id));
+                            if (article.isFavoriteForCurrent) {
+                              context
+                                  .read<UserBloc>()
+                                  .add(UserArticleDeleted(article.id));
+                            } else {
+                              context
+                                  .read<UserBloc>()
+                                  .add(UserArticleSaved(article.id));
+                            }
                           },
                         ),
                       )
@@ -222,6 +220,23 @@ class _ArticleCardState extends State<ArticleCard>
           ),
       ],
     );
+  }
+
+  _listenUserBloc(UserState state, Article article) {
+    if (state is UserArticleSaveSuccess &&
+        article.id == state.articleId) {
+      setState(() {
+        article.isFavoriteForCurrent = true;
+      });
+    } else if (state is UserArticleSaveFail) {
+      showSimpleSnackBar(context, 'Не удалось сохранить статью :(');
+    } else if (state is UserArticleDeleteSuccess && article.id == state.articleId) {
+      setState(() {
+        article.isFavoriteForCurrent = false;
+      });
+    } else if (state is UserArticleDeleteFail) {
+      showSimpleSnackBar(context, 'Не удалось удалить статью :(');
+    }
   }
 
   @override

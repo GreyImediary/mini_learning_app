@@ -49,4 +49,21 @@ class UserRepository {
       int userId = prefs.getInt(PrefConst.userId) ?? -1;
       return getUserById(userId);
   }
+
+  Future<bool> deleteFromFavorites(int articleId) async {
+    try {
+      if (_user != null) {
+        final response = await dio.delete(
+            '/user/${_user!.id}/articles/favorite/$articleId');
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          return true;
+        }
+      }
+
+      return false;
+    } on DioError {
+      return false;
+    }
+  }
 }

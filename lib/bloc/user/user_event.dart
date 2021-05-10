@@ -16,3 +16,12 @@ class UserArticleSaved extends UserEvent {
   @override
   List<Object> get props => [articleId];
 }
+
+class UserArticleDeleted extends UserEvent {
+  final int articleId;
+
+  UserArticleDeleted(this.articleId);
+
+  @override
+  List<Object> get props => [articleId];
+}
