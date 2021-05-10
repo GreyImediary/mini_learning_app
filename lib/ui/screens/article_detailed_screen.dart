@@ -22,15 +22,13 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
   @override
   void initState() {
     print(widget.article.video);
-    if (widget.article.video != null) {
-      final videoId = YoutubePlayer.convertUrlToId(widget.article.video!);
-      _controller = YoutubePlayerController(
-        initialVideoId: videoId!,
-        flags: YoutubePlayerFlags(
-          autoPlay: false,
-        ),
-      );
-    }
+    final videoId = YoutubePlayer.convertUrlToId(widget.article.video ?? '');
+    _controller = YoutubePlayerController(
+      initialVideoId: videoId!,
+      flags: YoutubePlayerFlags(
+        autoPlay: false,
+      ),
+    );
     super.initState();
   }
 
@@ -105,8 +103,7 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
               ],
             ),
           ),
-          if (widget.article.video != null)
-            player,
+          if (widget.article.video != null) player,
           Html(data: widget.article.content),
         ]);
       },
