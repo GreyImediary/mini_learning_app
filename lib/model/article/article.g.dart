@@ -17,6 +17,8 @@ Article _$ArticleFromJson(Map<String, dynamic> json) {
     (json['tags'] as List<dynamic>)
         .map((e) => Tag.fromJson(e as Map<String, dynamic>))
         .toList(),
+    json['isFavorite'] as bool,
+    json['isFinished'] as bool,
   );
 }
 
@@ -28,4 +30,6 @@ Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
       'favoriteFor': instance.favoriteFor,
       'previewUrl': instance.imageUrl,
       'tags': instance.tags,
+      'isFavorite': instance.isFavorite,
+      'isFinished': instance.isFinished,
     };

@@ -21,7 +21,8 @@ class DioClient {
               if (e.response?.statusCode == 403 ||
                   e.response?.statusCode == 401) {
                 await refreshToken();
-                _retry(e.requestOptions);
+
+                handler.resolve(await _retry(e.requestOptions));
               } else {
                 handler.next(e);
               }
@@ -38,7 +39,7 @@ class DioClient {
   static Dio getTokenDio() {
     if (_tokenDio == null) {
       _tokenDio = Dio()
-        ..options.baseUrl = 'http://192.168.0.10:3000'
+        ..options.baseUrl = 'http://192.168.0.15:3000'
         ..interceptors.add(LogInterceptor());
 
       return _tokenDio!;

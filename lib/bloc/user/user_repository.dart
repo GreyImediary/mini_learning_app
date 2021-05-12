@@ -27,6 +27,12 @@ class UserRepository {
     }
   }
 
+  Future<User?> getCurrentUser() async {
+      final prefs = await SharedPreferences.getInstance();
+      int userId = prefs.getInt(PrefConst.userId) ?? -1;
+      return getUserById(userId);
+  }
+
   Future<bool> saveToFavorite(int articleId) async {
     try {
       if (_user != null) {
@@ -42,12 +48,6 @@ class UserRepository {
     } on DioError {
       return false;
     }
-  }
-
-  Future<User?> getCurrentUser() async {
-      final prefs = await SharedPreferences.getInstance();
-      int userId = prefs.getInt(PrefConst.userId) ?? -1;
-      return getUserById(userId);
   }
 
   Future<bool> deleteFromFavorites(int articleId) async {

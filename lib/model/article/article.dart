@@ -13,8 +13,8 @@ class Article {
   @JsonKey(name: 'previewUrl')
   final String imageUrl;
   final List<Tag> tags;
-  @JsonKey(ignore: true)
-  bool isFavoriteForCurrent;
+  bool isFavorite;
+  bool isFinished;
 
   Article(
       this.id,
@@ -24,7 +24,9 @@ class Article {
       this.favoriteFor,
       this.imageUrl,
       this.tags,
-      {this.isFavoriteForCurrent = false});
+      this.isFavorite,
+      this.isFinished
+      );
 
   factory Article.fromJson(Map<String, dynamic> json) =>
       _$ArticleFromJson(json);

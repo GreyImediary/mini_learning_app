@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_learning_app/bloc/user/user_bloc.dart';
 import 'package:mini_learning_app/model/user/user.dart';
+import 'package:mini_learning_app/ui/screens/favorites_screen.dart';
 
 class ProfileCard extends StatelessWidget {
   final User user;
@@ -9,7 +12,7 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return                       Container(
+    return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -74,11 +77,18 @@ class ProfileCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(4),
-                  splashColor: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.5),
-                  onTap: () {},
+                  splashColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<UserBloc>(),
+                          child: FavoritesScreen(userId: user.id),
+                        ),
+                      ),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(4),
                     decoration: BoxDecoration(
@@ -99,10 +109,8 @@ class ProfileCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(4),
-                  splashColor: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.5),
+                  splashColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.5),
                   onTap: () {},
                   child: Container(
                     padding: EdgeInsets.all(4),
@@ -124,10 +132,8 @@ class ProfileCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(4),
-                  splashColor: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withOpacity(0.5),
+                  splashColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.5),
                   onTap: () {},
                   child: Container(
                     padding: EdgeInsets.all(4),

@@ -100,14 +100,14 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
                               constraints: BoxConstraints(),
                               splashRadius: 20,
                               icon: Icon(
-                                article.isFavoriteForCurrent
+                                article.isFavorite
                                     ? Icons.bookmark
                                     : Icons.bookmark_outline,
                                 color:
                                     Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {
-                                if (article.isFavoriteForCurrent) {
+                                if (article.isFavorite) {
                                   context
                                       .read<UserBloc>()
                                       .add(UserArticleDeleted(article.id));
@@ -138,13 +138,13 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
     if (state is UserArticleSaveSuccess &&
         article.id == state.articleId) {
       setState(() {
-        article.isFavoriteForCurrent = true;
+        article.isFavorite = true;
       });
     } else if (state is UserArticleSaveFail) {
       showSimpleSnackBar(context, 'Не удалось сохранить статью :(');
     } else if (state is UserArticleDeleteSuccess && article.id == state.articleId) {
       setState(() {
-        article.isFavoriteForCurrent = false;
+        article.isFavorite = false;
       });
     } else if (state is UserArticleDeleteFail) {
       showSimpleSnackBar(context, 'Не удалось удалить статью :(');
