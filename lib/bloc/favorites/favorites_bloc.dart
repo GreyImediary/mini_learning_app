@@ -4,16 +4,16 @@ import 'package:mini_learning_app/bloc/favorites/favorites_repository.dart';
 import 'package:mini_learning_app/bloc/favorites/favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
-  final FavoritesRepository articleRepository;
+  final FavoritesRepository favoritesRepository;
 
   FavoritesBloc(
-    this.articleRepository,
+    this.favoritesRepository,
   ) : super(FavoritesInitial());
 
   @override
   Stream<FavoritesState> mapEventToState(FavoritesEvent event) async* {
     if (event is FavoritesRequested) {
-      final favorites = await articleRepository.getFavorites();
+      final favorites = await favoritesRepository.getFavorites();
 
       yield FavoritesSuccess(favorites);
     } else if (event is FavoritesReset) {

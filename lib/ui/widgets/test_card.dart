@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mini_learning_app/model/tag/tag.dart';
+import 'package:mini_learning_app/model/test/test_card_data/test_card_data.dart';
 import 'package:mini_learning_app/ui/colors.dart';
 import 'package:mini_learning_app/ui/widgets/tag_button.dart';
 import 'package:shimmer/shimmer.dart';
@@ -7,6 +10,10 @@ import 'package:mini_learning_app/ui/widgets/tag.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class TestCard extends StatefulWidget {
+  final TestCardData testCardData;
+
+  TestCard(this.testCardData);
+
   @override
   _TestCardState createState() => _TestCardState();
 }
@@ -17,7 +24,6 @@ class _TestCardState extends State<TestCard>
   late Animation<double> _sizeAnimation;
   late Animation<double> _rotationAnimation;
 
-  bool _isTestFinished = false;
 
   @override
   void initState() {
@@ -34,10 +40,19 @@ class _TestCardState extends State<TestCard>
 
   @override
   Widget build(BuildContext context) {
+    final testData = widget.testCardData;
+    final questionCount =
+        widget.testCardData.exactAnswerQuestions +
+            widget.testCardData.manyOfQuestions +
+            widget.testCardData.oneOfQuestions +
+            widget.testCardData.orderQuestions;
     return Material(
       borderRadius: BorderRadius.circular(8),
       elevation: 3,
-      color: Theme.of(context).colorScheme.surface,
+      color: Theme
+          .of(context)
+          .colorScheme
+          .surface,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
         onTap: () {},
@@ -64,8 +79,7 @@ class _TestCardState extends State<TestCard>
                     ),
                     FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image:
-                          'https://images.drive.ru/i/0/59786698ec05c4365e000006.jpg',
+                      image: testData.imageUrl ?? '',
                       fit: BoxFit.cover,
                       height: 56,
                       fadeInDuration: Duration(milliseconds: 400),
@@ -79,57 +93,14 @@ class _TestCardState extends State<TestCard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Название теста',
-                      style: Theme.of(context).textTheme.subtitle2
+                        testData.title,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .subtitle2
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TagWidget(
-                            text: 'Ты',
-                            onTap: () {},
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: TagWidget(
-                            text: 'Очень длинный тэг',
-                            onTap: () {},
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TagButton(
-                            rotationAnimation: _rotationAnimation,
-                            onTap: () {
-                              if (_controller.status ==
-                                  AnimationStatus.completed) {
-                                _controller.reverse();
-                              } else {
-                                _controller.forward();
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    SizeTransition(
-                      sizeFactor: _sizeAnimation,
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          TagWidget(text: 'Привет'),
-                          TagWidget(text: 'Я тэг'),
-                          TagWidget(text: 'Дргуой тэг'),
-                          TagWidget(text: 'Я длинн')
-                        ],
-                      ),
-                    ),
+                    _buildTags(testData.tags),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,11 +109,11 @@ class _TestCardState extends State<TestCard>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(Icons.not_listed_location),
-                            Text('5'),
+                            Text('$questionCount'),
                           ],
                         ),
                         AnimatedOpacity(
-                          opacity: _isTestFinished ? 1.0 : 0.0,
+                          opacity: testData.isFinished ? 1.0 : 0.0,
                           duration: Duration(milliseconds: 300),
                           child: Icon(
                             Icons.verified,
@@ -160,6 +131,81 @@ class _TestCardState extends State<TestCard>
       ),
     );
   }
+
+  Widget _buildTags(List<Tag> tags) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            if (tags.length > 4)
+              ...tags
+                  .sublist(0, 4)
+                  .map(
+                    (tag) =>
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: TagWidget(
+                          text: tag.text,
+                          onTap: () {},
+                        ),
+                      ),
+                    ),
+              )
+                  .toList(),
+            if (tags.length <= 4)
+              ...tags
+                  .map(
+                    (tag) =>
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: TagWidget(
+                          text: tag.text,
+                          onTap: () {},
+                        ),
+                      ),
+                    ),
+              )
+                  .toList(),
+            if (tags.length > 4)
+              Expanded(
+                child: TagButton(
+                  rotationAnimation: _rotationAnimation,
+                  onTap: () {
+                    if (_controller.status == AnimationStatus.completed) {
+                      _controller.reverse();
+                    } else {
+                      _controller.forward();
+                    }
+                  },
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (tags.length > 4)
+          SizeTransition(
+            sizeFactor: _sizeAnimation,
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ...tags.sublist(4, tags.length).map(
+                      (tag) =>
+                      TagWidget(
+                        text: tag.text,
+                        onTap: () {},
+                      ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
 
   @override
   void dispose() {
