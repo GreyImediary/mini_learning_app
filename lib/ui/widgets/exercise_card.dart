@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mini_learning_app/model/exercise/exercise_card_data/exercise_card_data.dart';
 import 'package:mini_learning_app/ui/colors.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ExerciseCard extends StatefulWidget {
+  final ExerciseCardData exerciseCardData;
+
+  ExerciseCard(this.exerciseCardData);
+
   @override
   ExerciseCardState createState() => ExerciseCardState();
 }
@@ -16,6 +21,8 @@ class ExerciseCardState extends State<ExerciseCard>
 
   @override
   Widget build(BuildContext context) {
+    final exerciseData = widget.exerciseCardData;
+
     return Material(
       borderRadius: BorderRadius.circular(8),
       elevation: 3,
@@ -46,8 +53,7 @@ class ExerciseCardState extends State<ExerciseCard>
                     ),
                     FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image:
-                          'https://images.drive.ru/i/0/59786698ec05c4365e000006.jpg',
+                      image: exerciseData.imageUrl ?? '',
                       fit: BoxFit.cover,
                       height: 56,
                       fadeInDuration: Duration(milliseconds: 400),
@@ -61,7 +67,7 @@ class ExerciseCardState extends State<ExerciseCard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Название упражнения',
+                      exerciseData.title,
                       style: Theme.of(context).textTheme.subtitle2
                     ),
                     const SizedBox(height: 16),
@@ -73,7 +79,7 @@ class ExerciseCardState extends State<ExerciseCard>
                           children: [
                             Icon(Icons.filter_none, size: 16,),
                             const SizedBox(width: 4,),
-                            Text('5'),
+                            Text('${exerciseData.articleCount + exerciseData.testCount}'),
                           ],
                         ),
                         AnimatedOpacity(
