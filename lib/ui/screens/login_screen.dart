@@ -22,16 +22,16 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.only(left: 16, top: 64, right: 16, bottom: 16),
           child: SingleChildScrollView(
             child: Container(
-              height: MediaQuery.of(context).size.height - 60,
+              height: MediaQuery.of(context).size.height - 108,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'MINI\nLearning App',
+                    'MINI Study',
                     style: Theme.of(context)
                         .textTheme
                         .headline3
