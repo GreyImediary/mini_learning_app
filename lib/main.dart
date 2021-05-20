@@ -1,6 +1,5 @@
 // @dart=2.9
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mini_learning_app/bloc/user/user_repository.dart';
@@ -11,7 +10,7 @@ import 'bloc/auth/auth_repository.dart';
 
 void main() async {
 
-  final authRepository = AuthRepository(DioClient.dio, DioClient.tokenDio);
+  final authRepository = AuthRepository(DioClient.dio);
   final userRepository = UserRepository(DioClient.dio);
 
   runApp(App(

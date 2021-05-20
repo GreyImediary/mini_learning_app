@@ -17,19 +17,18 @@ enum AuthStatus {
 
 class AuthRepository {
   final Dio dio;
-  final Dio tokenDio;
 
-  final _controller = StreamController<AuthStatus>();
+  final _statusController = StreamController<AuthStatus>();
 
   Stream<AuthStatus> get status async* {
-    yield* _controller.stream;
+    yield* _statusController.stream;
   }
 
-  AuthRepository(this.dio, this.tokenDio);
+  AuthRepository(this.dio);
 
   Future<void> login(String email, String password) async {
     try {
-      final response = await tokenDio.post(
+      final response = await dio.post(
         '/auth/login',
         data: {'email': email, 'password': password},
       );
@@ -39,11 +38,11 @@ class AuthRepository {
 
         dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
 
-        await _saveToPrefs(token);
-        _controller.add(AuthStatus.authenticated);
+        await DioClient.saveTokenToPrefs(token);
+        _statusController.add(AuthStatus.authenticated);
       }
     } on DioError {
-      _controller.add(AuthStatus.loginError);
+      _statusController.add(AuthStatus.loginError);
     }
   }
 
@@ -51,28 +50,7 @@ class AuthRepository {
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
 
-    _controller.add(AuthStatus.unauthenticated);
-  }
-
-  Future<void> refreshToken() async {
-    try {
-      final Token token = await DioClient.refreshToken();
-      await _saveToPrefs(token);
-    } on DioError {
-      _controller.add(AuthStatus.refreshError);
-    }
-  }
-
-  Future<void> _saveToPrefs(Token token) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    print('ACCESS ${token.accessToken}');
-    print('REFRESH ${token.refreshToken}');
-
-    prefs.setString(PrefConst.refreshToken, token.refreshToken);
-
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token.accessToken);
-    prefs.setInt(PrefConst.userId, decodedToken['sub'] as int);
+    _statusController.add(AuthStatus.unauthenticated);
   }
 
   Future<void> checkAuth() async {
@@ -84,14 +62,14 @@ class AuthRepository {
 
     if (isUserLogged) {
       if (!JwtDecoder.isExpired(token!)) {
-        _controller.add(AuthStatus.authenticated);
+        _statusController.add(AuthStatus.authenticated);
       } else {
-        _controller.add(AuthStatus.refreshError);
+        _statusController.add(AuthStatus.refreshError);
       }
     } else {
-      _controller.add(AuthStatus.unauthenticated);
+      _statusController.add(AuthStatus.unauthenticated);
     }
   }
 
-  void dispose() => _controller.close();
+  void dispose() => _statusController.close();
 }
