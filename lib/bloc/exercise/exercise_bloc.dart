@@ -4,16 +4,16 @@ import 'package:mini_learning_app/bloc/exercise/exercise_repository.dart';
 import 'package:mini_learning_app/bloc/exercise/exercise_state.dart';
 
 class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
-  final ExerciseRepository favoritesRepository;
+  final ExerciseRepository exerciseRepository;
 
   ExerciseBloc(
-      this.favoritesRepository,
+      this.exerciseRepository,
       ) : super(ExerciseInitial());
 
   @override
   Stream<ExerciseState> mapEventToState(ExerciseEvent event) async* {
     if (event is ExercisesRequested) {
-      final favorites = await favoritesRepository.getExercises();
+      final favorites = await exerciseRepository.getExercises();
 
       yield ExercisesSuccess(favorites);
     } else if (event is ExercisesReset) {
