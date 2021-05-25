@@ -4,18 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_learning_app/bloc/auth/auth_event.dart';
 import 'package:mini_learning_app/bloc/auth/auth_repository.dart';
 import 'package:mini_learning_app/bloc/auth/auth_state.dart';
-import 'package:mini_learning_app/bloc/user/user_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final UserRepository _userRepository;
   final AuthRepository _authRepository;
   late StreamSubscription _statusStream;
 
-  AuthBloc(
-      {required AuthRepository authRepository,
-      required UserRepository userRepository})
-      : _userRepository = userRepository,
-        _authRepository = authRepository,
+  AuthBloc({required AuthRepository authRepository})
+      : _authRepository = authRepository,
         super(AuthInitial()) {
     _statusStream = _authRepository.status.listen((status) {
       add(AuthStatusChanged(status));
@@ -35,27 +30,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case AuthStatus.unknown:
         return AuthInitial();
       case AuthStatus.authenticated:
-        final user = await _userRepository.getCurrentUser();
-        
-        if (user != null) {
-          return AuthSuccess(user);
-        } else {
-          return AuthFailure(
-            'Не удалось получить данные пользователя',
-            AuthStatus.unauthenticated,
-          );
-        }
+        return AuthSuccess();
       case AuthStatus.unauthenticated:
         return AuthLogin();
       case AuthStatus.loginError:
         return AuthFailure(
-            'Не удаётся войти. Пожалуйста, проверьте правильность ввода почты и пароля.',
-            AuthStatus.loginError,
+          'Не удаётся войти. Пожалуйста, проверьте правильность ввода почты и пароля.',
+          AuthStatus.loginError,
         );
       case AuthStatus.refreshError:
         return AuthFailure(
-            'Ваша сессия истекла. Пожалуйста, повторите авторизацию.',
-            AuthStatus.refreshError,
+          'Ваша сессия истекла. Пожалуйста, повторите авторизацию.',
+          AuthStatus.refreshError,
         );
       default:
         return AuthInitial();

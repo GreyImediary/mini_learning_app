@@ -1,5 +1,4 @@
 import 'package:mini_learning_app/bloc/auth/auth_repository.dart';
-import 'package:mini_learning_app/model/user/user.dart';
 
 class AuthState {
   const AuthState();
@@ -16,8 +15,4 @@ class AuthFailure extends AuthState {
   const AuthFailure(this.message, this.status);
 }
 
-class AuthSuccess extends AuthState {
-  final User user;
-
-  const AuthSuccess(this.user);
-}
+class AuthSuccess extends AuthState {}

@@ -28,7 +28,6 @@ class App extends StatelessWidget {
         lazy: false,
         create: (BuildContext context) => AuthBloc(
           authRepository: authRepository,
-          userRepository: userRepository,
         ),
         child: AppView(),
       ),
