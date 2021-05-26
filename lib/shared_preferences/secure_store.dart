@@ -16,7 +16,7 @@ class SecureStorage {
   }
 
   static Future<int?> getInt(String key) async {
-    return (await _getStorage().read(key: key)) as int?;
+    return int.tryParse(await _getStorage().read(key: key) ?? '');
   }
 
   static Future<void> clear () async {

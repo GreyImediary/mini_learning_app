@@ -4,13 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_learning_app/bloc/auth/auth_event.dart';
 import 'package:mini_learning_app/bloc/auth/auth_repository.dart';
 import 'package:mini_learning_app/bloc/auth/auth_state.dart';
+import 'package:mini_learning_app/bloc/user/user_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
+  final UserRepository _userRepository;
   late StreamSubscription _statusStream;
 
-  AuthBloc({required AuthRepository authRepository})
+  AuthBloc({
+    required AuthRepository authRepository,
+    required UserRepository userRepository
+  })
       : _authRepository = authRepository,
+        _userRepository = userRepository,
         super(AuthInitial()) {
     _statusStream = _authRepository.status.listen((status) {
       add(AuthStatusChanged(status));
@@ -30,6 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       case AuthStatus.unknown:
         return AuthInitial();
       case AuthStatus.authenticated:
+        await _userRepository.getCurrentUser();
         return AuthSuccess();
       case AuthStatus.unauthenticated:
         return AuthLogin();
