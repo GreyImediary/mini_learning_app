@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mini_learning_app/model/user/user.dart';
 import 'package:mini_learning_app/shared_preferences/pref_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mini_learning_app/shared_preferences/secure_store.dart';
 
 class UserRepository {
   final Dio dio;
@@ -28,8 +28,7 @@ class UserRepository {
   }
 
   Future<User?> getCurrentUser() async {
-      final prefs = await SharedPreferences.getInstance();
-      int userId = prefs.getInt(PrefConst.userId) ?? -1;
+      int userId = await SecureStorage.getInt(PrefConst.userId) ?? -1;
       return getUserById(userId);
   }
 

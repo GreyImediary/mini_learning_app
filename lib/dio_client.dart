@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mini_learning_app/model/token/token.dart';
 import 'package:mini_learning_app/shared_preferences/pref_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mini_learning_app/shared_preferences/secure_store.dart';
 
 class DioClient {
   static Dio get dio => getDio();
@@ -50,8 +50,7 @@ class DioClient {
   }
 
   static Future<void> _refreshToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final refreshToken = prefs.getString(PrefConst.refreshToken) ?? '';
+    final refreshToken = await SecureStorage.getString(PrefConst.refreshToken) ?? '';
 
     Response<Map<String, dynamic>> response = await tokenDio.post(
       '/auth/refresh',
@@ -77,12 +76,10 @@ class DioClient {
   }
 
   static Future<void> saveTokenToPrefs(Token token) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    prefs.setString(PrefConst.refreshToken, token.refreshToken);
+    SecureStorage.saveString(PrefConst.refreshToken, token.refreshToken);
 
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token.accessToken);
-    prefs.setInt(PrefConst.userId, decodedToken['sub'] as int);
+    SecureStorage.saveInt(PrefConst.userId, decodedToken['sub'] as int);
   }
 
 }

@@ -5,7 +5,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:mini_learning_app/dio_client.dart';
 import 'package:mini_learning_app/model/token/token.dart';
 import 'package:mini_learning_app/shared_preferences/pref_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mini_learning_app/shared_preferences/secure_store.dart';
 
 enum AuthStatus {
   unknown,
@@ -47,18 +47,16 @@ class AuthRepository {
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    SecureStorage.clear();
 
     _statusController.add(AuthStatus.unauthenticated);
   }
 
   Future<void> checkAuth() async {
-    final prefs = await SharedPreferences.getInstance();
 
-    final token = prefs.getString(PrefConst.refreshToken);
+    final token = await SecureStorage.getString(PrefConst.refreshToken);
     final isUserLogged =  token != null &&
-        prefs.getInt(PrefConst.userId) != null;
+        await SecureStorage.getInt(PrefConst.userId) != null;
 
     if (isUserLogged) {
       if (!JwtDecoder.isExpired(token!)) {
