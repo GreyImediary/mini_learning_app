@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mini_learning_app/bloc/page_handler.dart';
 import 'package:mini_learning_app/model/test/test_card_data/test_card_data.dart';
+import 'package:mini_learning_app/model/test/test_data/test.dart';
 
 class TestRepository {
   final Dio dio;
@@ -34,6 +35,16 @@ class TestRepository {
       return [];
     } on DioError {
       return [];
+    }
+  }
+
+  Future<Test?> getTest(int id) async {
+    try {
+      final response = await dio.get('/test/$id');
+
+      return Test.fromJson(response.data);
+    } on DioError {
+      return null;
     }
   }
 }
