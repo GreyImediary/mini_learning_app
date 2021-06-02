@@ -71,6 +71,9 @@ flutter:
      - assets/mini_logo.svg
      - assets/mini_logo.png
      - assets/defaultProfile.png
+     - assets/sad_face.svg
+     - assets/happy_face.svg
+     - assets/straight_face.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

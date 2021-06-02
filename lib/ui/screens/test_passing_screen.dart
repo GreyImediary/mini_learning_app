@@ -8,6 +8,7 @@ import 'package:mini_learning_app/model/test/question_answer_data/answer_data.da
 import 'package:mini_learning_app/model/test/test_data/test.dart';
 import 'package:mini_learning_app/ui/colors.dart';
 import 'package:mini_learning_app/ui/widgets/test_dot.dart';
+import 'package:mini_learning_app/ui/widgets/test_final_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class TestPassingScreen extends StatefulWidget {
@@ -25,6 +26,8 @@ class _TestPassingScreenState extends State<TestPassingScreen> {
   int _questionIndex = 0;
   bool _showNextButton = false;
 
+  double correctAnswerNumber = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,16 +35,31 @@ class _TestPassingScreenState extends State<TestPassingScreen> {
         create: (BuildContext context) => TestScreenBloc(
           widget.test.questions.length,
         ),
-        child: BlocBuilder<TestScreenBloc, TestScreenState>(
+        child: BlocConsumer<TestScreenBloc, TestScreenState>(
+          listener: (_, state) {
+            if (state is TestFinish) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => TestFinalScreen(
+                    correctAnswerNumber,
+                    answerList.length.toDouble(),
+                    widget.test,
+                  ),
+                ),
+              );
+            }
+          },
           builder: (BuildContext context, state) {
             if (state is TestAnswerSuccess) {
               answerList.add(state.answer);
               _showNextButton = !_showNextButton;
+
+              if (state.answer.isCorrect) {
+                correctAnswerNumber++;
+              }
             } else if (state is TestNextQuestion) {
               _questionIndex++;
               _showNextButton = !_showNextButton;
-            } else if (state is TestFinish) {
-              print("AAAAAAAAAAAAAAAAaa");
             }
 
             return SafeArea(
