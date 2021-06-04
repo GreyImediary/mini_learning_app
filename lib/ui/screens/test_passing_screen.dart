@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_learning_app/bloc/test/test_repository.dart';
 import 'package:mini_learning_app/bloc/test_screen/test_screen_bloc.dart';
 import 'package:mini_learning_app/bloc/test_screen/test_screen_event.dart';
 import 'package:mini_learning_app/bloc/test_screen/test_screen_state.dart';
 import 'package:mini_learning_app/model/test/question_answer_data/answer_data.dart';
 import 'package:mini_learning_app/model/test/test_data/test.dart';
+import 'package:mini_learning_app/shared_preferences/pref_constants.dart';
+import 'package:mini_learning_app/shared_preferences/secure_store.dart';
 import 'package:mini_learning_app/ui/colors.dart';
 import 'package:mini_learning_app/ui/widgets/test_dot.dart';
 import 'package:mini_learning_app/ui/widgets/test_final_screen.dart';
@@ -36,8 +39,11 @@ class _TestPassingScreenState extends State<TestPassingScreen> {
           widget.test.questions.length,
         ),
         child: BlocConsumer<TestScreenBloc, TestScreenState>(
-          listener: (_, state) {
+          listener: (_, state) async {
             if (state is TestFinish) {
+              final userId = await SecureStorage.getInt(PrefConst.userId);
+              context.read<TestRepository>().finishTest(userId ?? -1, widget.test.id, answerList);
+
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (_) => TestFinalScreen(

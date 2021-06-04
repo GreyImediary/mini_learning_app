@@ -15,7 +15,7 @@ class DioClient {
     if (_dio == null) {
       _dio = Dio()
         ..options.baseUrl = 'http://192.168.0.15:3000'
-        ..interceptors.add(LogInterceptor())
+        ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
         ..interceptors.add(
           InterceptorsWrapper(
             onError: (DioError e, handler) async {

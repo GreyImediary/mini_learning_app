@@ -64,7 +64,7 @@ class TestFinalScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'Повторите необходимую тему и пройдите тест ещё раз.',
+                _getText(),
                 style: Theme.of(context).textTheme.headline5,
                 textAlign: TextAlign.center,
               ),
@@ -128,7 +128,7 @@ class TestFinalScreen extends StatelessWidget {
     }
   }
 
-  String getText() {
+  String _getText() {
     if (correctnessPercent >= 75) {
       return 'Вы отлично справились с тестом! Продолжайте в том же духе!';
     } else if (correctnessPercent <= 25) {

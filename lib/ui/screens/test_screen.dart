@@ -33,50 +33,58 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => TestBloc(
-          TestRepository(
-            DioClient.dio,
-            PageHandler(),
-          ),
-        )..add(TestsRequested()),
-        child: BlocConsumer<TestBloc, TestState>(
-          listener: (_, state) {
-            if (state is TestsSuccess) {
-              tests.addAll(state.tests);
-            } else if (state is TestSuccess) {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => TestPassingScreen(state.test),
-              ));
-            }
-          },
-          builder: (context, state) {
-            if (state is TestInitial) {
-              return Center(
-                child: ThemedProgressIndicator(),
-              );
-            } else {
-              return SafeArea(
-                child: Center(
-                  child: SmartRefresher(
-                    enablePullUp: true,
-                    onRefresh: () {
-                      context.read<TestBloc>().add(TestsReset());
-                      _controller.refreshCompleted();
-                    },
-                    onLoading: () {
-                      context.read<TestBloc>().add(TestsRequested());
-                      _controller.loadComplete();
-                    },
-                    controller: _controller,
-                    child: tests.isNotEmpty
-                        ? _showTests(context)
-                        : _showNoTestsContent(context),
+      body: RepositoryProvider(
+        create: (BuildContext context) => TestRepository(
+          DioClient.dio,
+          PageHandler(),
+        ),
+        child: BlocProvider(
+          create: (context) => TestBloc(
+            context.read<TestRepository>(),
+          )..add(TestsRequested()),
+          child: BlocConsumer<TestBloc, TestState>(
+            listener: (context, state) {
+              if (state is TestsSuccess) {
+                tests.addAll(state.tests);
+              } else if (state is TestSuccess) {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) {
+                    return RepositoryProvider.value(
+                      value: context.read<TestRepository>(),
+                      child: TestPassingScreen(state.test),
+                    );
+                  },
+                ));
+              }
+            },
+            builder: (context, state) {
+              if (state is TestInitial) {
+                return Center(
+                  child: ThemedProgressIndicator(),
+                );
+              } else {
+                return SafeArea(
+                  child: Center(
+                    child: SmartRefresher(
+                      enablePullUp: true,
+                      onRefresh: () {
+                        context.read<TestBloc>().add(TestsReset());
+                        _controller.refreshCompleted();
+                      },
+                      onLoading: () {
+                        context.read<TestBloc>().add(TestsRequested());
+                        _controller.loadComplete();
+                      },
+                      controller: _controller,
+                      child: tests.isNotEmpty
+                          ? _showTests(context)
+                          : _showNoTestsContent(context),
+                    ),
                   ),
-                ),
-              );
-            }
-          },
+                );
+              }
+            },
+          ),
         ),
       ),
     );
