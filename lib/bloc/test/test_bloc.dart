@@ -18,6 +18,12 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       yield TestInitial();
 
       add(TestsRequested());
+    } else if (event is TestRequested) {
+      final test = await testRepository.getTest(event.id);
+
+      if (test != null) {
+        yield TestSuccess(test);
+      }
     }
   }
 }

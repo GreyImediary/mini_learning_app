@@ -90,4 +90,5 @@ final theme = ThemeData(
     unselectedItemColor: Color.fromRGBO(255, 255, 255, 0.38),
     selectedItemColor: Colors.white,
   ),
+  unselectedWidgetColor: testOptionColor
 );

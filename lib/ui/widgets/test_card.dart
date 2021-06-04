@@ -11,8 +11,10 @@ import 'package:transparent_image/transparent_image.dart';
 
 class TestCard extends StatefulWidget {
   final TestCardData testCardData;
+  final VoidCallback onTap;
 
-  TestCard(this.testCardData);
+
+  TestCard({required this.testCardData, required this.onTap});
 
   @override
   _TestCardState createState() => _TestCardState();
@@ -55,7 +57,7 @@ class _TestCardState extends State<TestCard>
           .surface,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: () {},
+        onTap: widget.onTap,
         child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

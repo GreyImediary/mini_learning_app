@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mini_learning_app/model/test/test_card_data/test_card_data.dart';
+import 'package:mini_learning_app/model/test/test_data/test.dart';
 
 class TestState extends Equatable {
 
@@ -18,4 +19,13 @@ class TestsSuccess extends TestState {
 
   @override
   List<Object> get props => [tests];
+}
+
+class TestSuccess extends TestState {
+  final Test test;
+
+  TestSuccess(this.test);
+
+  @override
+  List<Object> get props => [test];
 }

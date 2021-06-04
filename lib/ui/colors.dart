@@ -19,3 +19,5 @@ const tagColor = Color.fromRGBO(237, 237, 237, 1.0);
 
 const textMainColor = Color.fromRGBO(28, 28, 28, 0.87);
 const textSecondaryColor = Color.fromRGBO(60, 60, 60, 0.87);
+
+const testOptionColor = Color.fromRGBO(190, 204, 237, 1.0);
