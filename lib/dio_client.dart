@@ -21,7 +21,12 @@ class DioClient {
             onError: (DioError e, handler) async {
               if (e.response?.statusCode == 403 ||
                   e.response?.statusCode == 401) {
-                await _refreshToken();
+
+                final isRefreshed = await _refreshToken();
+
+                if (!isRefreshed) {
+                  handler.next(e);
+                }
 
                 handler.resolve(await _retry(e.requestOptions));
               } else {
@@ -49,19 +54,26 @@ class DioClient {
     }
   }
 
-  static Future<void> _refreshToken() async {
-    final refreshToken = await SecureStorage.getString(PrefConst.refreshToken) ?? '';
+  static Future<bool> _refreshToken() async {
+    try {
+      final refreshToken = await SecureStorage.getString(
+          PrefConst.refreshToken) ?? '';
 
-    Response<Map<String, dynamic>> response = await tokenDio.post(
-      '/auth/refresh',
-      data: {'refreshToken': refreshToken},
-    );
+      Response<Map<String, dynamic>> response = await tokenDio.post(
+        '/auth/refresh',
+        data: {'refreshToken': refreshToken},
+      );
 
-    final token = Token.fromJson(response.data!);
+      final token = Token.fromJson(response.data!);
 
-    await saveTokenToPrefs(token);
+      await saveTokenToPrefs(token);
 
-    dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+
+      return true;
+    } on DioError {
+      return false;
+    }
   }
 
   static Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {

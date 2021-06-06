@@ -47,7 +47,7 @@ class AuthRepository {
   }
 
   Future<void> logout() async {
-    SecureStorage.clear();
+    await SecureStorage.clear();
 
     _statusController.add(AuthStatus.unauthenticated);
   }
