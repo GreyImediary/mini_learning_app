@@ -109,7 +109,9 @@ class _ArticleCardState extends State<ArticleCard>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        article.content,
+                        article.content
+                            .replaceAll(RegExp(r"<[^>]*>"), '')
+                            .replaceAll(RegExp(r"[^а-яА-Я0-9 \r\n]"), ''),
                         style: Theme.of(context).textTheme.bodyText1,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -223,14 +225,14 @@ class _ArticleCardState extends State<ArticleCard>
   }
 
   _listenUserBloc(UserState state, Article article) {
-    if (state is UserArticleSaveSuccess &&
-        article.id == state.articleId) {
+    if (state is UserArticleSaveSuccess && article.id == state.articleId) {
       setState(() {
         article.isFavorite = true;
       });
     } else if (state is UserArticleSaveFail) {
       showSimpleSnackBar(context, 'Не удалось сохранить статью :(');
-    } else if (state is UserArticleDeleteSuccess && article.id == state.articleId) {
+    } else if (state is UserArticleDeleteSuccess &&
+        article.id == state.articleId) {
       setState(() {
         article.isFavorite = false;
       });
