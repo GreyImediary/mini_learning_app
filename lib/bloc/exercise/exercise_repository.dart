@@ -32,7 +32,7 @@ class ExerciseRepository {
       }
 
       return [];
-    } on DioError {
+    } on Error {
       return [];
     }
   }
