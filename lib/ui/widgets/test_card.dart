@@ -140,9 +140,9 @@ class _TestCardState extends State<TestCard>
       children: [
         Row(
           children: [
-            if (tags.length > 4)
+            if (tags.length > 2)
               ...tags
-                  .sublist(0, 4)
+                  .sublist(0, 2)
                   .map(
                     (tag) =>
                     Expanded(
@@ -156,7 +156,7 @@ class _TestCardState extends State<TestCard>
                     ),
               )
                   .toList(),
-            if (tags.length <= 4)
+            if (tags.length <= 2)
               ...tags
                   .map(
                     (tag) =>
@@ -171,7 +171,7 @@ class _TestCardState extends State<TestCard>
                     ),
               )
                   .toList(),
-            if (tags.length > 4)
+            if (tags.length > 2)
               Expanded(
                 child: TagButton(
                   rotationAnimation: _rotationAnimation,
@@ -187,14 +187,14 @@ class _TestCardState extends State<TestCard>
           ],
         ),
         const SizedBox(height: 8),
-        if (tags.length > 4)
+        if (tags.length > 2)
           SizeTransition(
             sizeFactor: _sizeAnimation,
             child: Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                ...tags.sublist(4, tags.length).map(
+                ...tags.sublist(2, tags.length).map(
                       (tag) =>
                       TagWidget(
                         text: tag.text,
