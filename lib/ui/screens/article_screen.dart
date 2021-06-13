@@ -30,6 +30,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Статьи'),
+      ),
       body: BlocProvider(
         create: (context) => ArticleBloc(
           ArticleRepository(

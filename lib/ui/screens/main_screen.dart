@@ -13,10 +13,10 @@ import 'package:mini_learning_app/ui/screens/test_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final _screenList = [
+    ArticleScreen(),
     ExerciseScreen(),
     TestScreen(),
-    ArticleScreen(),
-    NewsScreen(),
+   //NewsScreen(),
     ProfileScreen(),
   ];
 
@@ -37,7 +37,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 2;
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +60,11 @@ class _MainScreenState extends State<MainScreen> {
         items: [
           BottomNavigationBarItem(
             backgroundColor: primary,
+            icon: Icon(Icons.text_snippet),
+            label: 'Статьи',
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: primary,
             icon: Icon(Icons.fitness_center),
             label: 'Упражнения',
           ),
@@ -68,16 +73,11 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.help),
             label: 'Тесты',
           ),
-          BottomNavigationBarItem(
-            backgroundColor: primary,
-            icon: Icon(Icons.text_snippet),
-            label: 'Статьи',
-          ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             backgroundColor: primary,
             icon: Icon(Icons.campaign),
             label: 'Новости',
-          ),
+          ),*/
           BottomNavigationBarItem(
             backgroundColor: primary,
             icon: Icon(Icons.person),

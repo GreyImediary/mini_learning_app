@@ -35,6 +35,9 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Тесты'),
+      ),
       body: RepositoryProvider(
         create: (BuildContext context) => TestRepository(
           DioClient.dio,
