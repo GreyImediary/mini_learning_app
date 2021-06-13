@@ -22,11 +22,13 @@ class TestScreen extends StatefulWidget {
 
 class _TestScreenState extends State<TestScreen> {
   final tests = <TestCardData>[];
-  late RefreshController _controller;
+  late RefreshController _refreshController;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
-    _controller = RefreshController(initialRefresh: false);
+    _refreshController = RefreshController(initialRefresh: false);
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -69,13 +71,14 @@ class _TestScreenState extends State<TestScreen> {
                       enablePullUp: true,
                       onRefresh: () {
                         context.read<TestBloc>().add(TestsReset());
-                        _controller.refreshCompleted();
+                        _refreshController.refreshCompleted();
                       },
                       onLoading: () {
                         context.read<TestBloc>().add(TestsRequested());
-                        _controller.loadComplete();
+                        _refreshController.loadComplete();
                       },
-                      controller: _controller,
+                      controller: _refreshController,
+                      scrollController: _scrollController,
                       child: tests.isNotEmpty
                           ? _showTests(context)
                           : _showNoTestsContent(context),
@@ -98,6 +101,7 @@ class _TestScreenState extends State<TestScreen> {
         itemCount: tests.length,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
+        controller: _scrollController,
         itemBuilder: (BuildContext context, int index) => TestCard(
           testCardData: tests[index],
           onTap: () {
@@ -121,7 +125,7 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _refreshController.dispose();
     super.dispose();
   }
 }
