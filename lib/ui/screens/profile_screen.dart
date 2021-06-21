@@ -6,6 +6,7 @@ import 'package:mini_learning_app/bloc/profile/profile_bloc.dart';
 import 'package:mini_learning_app/bloc/profile/profile_event.dart';
 import 'package:mini_learning_app/bloc/profile/profile_state.dart';
 import 'package:mini_learning_app/bloc/user/user_repository.dart';
+import 'package:mini_learning_app/help_functions/snack_bar_helpers.dart';
 import 'package:mini_learning_app/ui/colors.dart';
 import 'package:mini_learning_app/ui/widgets/ThemedProgressIndicator.dart';
 import 'package:mini_learning_app/ui/widgets/profile_screen_widgets/homework_panel.dart';
@@ -27,7 +28,12 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: BlocProvider(
           create: (_) => ProfileBloc(userRepo)..add(ProfileUserRequested()),
-          child: BlocBuilder<ProfileBloc, ProfileState>(
+          child: BlocConsumer<ProfileBloc, ProfileState>(
+            listener: (_, state) {
+              if (state is ProfileFail) {
+                showSimpleSnackBar(context, 'Ошибка получения данных пользователя');
+              }
+            },
             builder: (_, state) {
               if (state is ProfileInitial) {
                 return Center(

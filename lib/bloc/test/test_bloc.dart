@@ -17,6 +17,7 @@ class TestBloc extends Bloc<TestEvent, TestState> {
     } else if (event is TestsReset) {
       yield TestInitial();
 
+      testRepository.resetPage();
       add(TestsRequested());
     } else if (event is TestRequested) {
       final test = await testRepository.getTest(event.id);

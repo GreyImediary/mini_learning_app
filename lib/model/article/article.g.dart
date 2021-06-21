@@ -13,7 +13,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) {
     json['content'] as String,
     json['video'] as String?,
     json['favoriteFor'] as int,
-    json['previewUrl'] as String,
+    json['previewUrl'] as String?,
     (json['tags'] as List<dynamic>)
         .map((e) => Tag.fromJson(e as Map<String, dynamic>))
         .toList(),

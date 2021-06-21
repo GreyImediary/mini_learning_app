@@ -11,7 +11,7 @@ class Article {
   final String? video;
   final int favoriteFor;
   @JsonKey(name: 'previewUrl')
-  final String imageUrl;
+  final String? imageUrl;
   final List<Tag> tags;
   bool isFavorite;
   bool isFinished;

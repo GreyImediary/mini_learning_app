@@ -15,7 +15,7 @@ class ExerciseRepository {
         queryParameters: {'page': pageHandler.page, 'perPage': pageHandler.perPage},
       );
 
-      final jsonExercises = response.data as List?;
+      final jsonExercises = response.data['data'] as List?;
 
       if (jsonExercises != null) {
         final exercises = jsonExercises

@@ -35,6 +35,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Избранные'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: BlocListener<UserBloc, UserState>(
         listener: (_, state) {
           if (state is UserArticleDeleteSuccess) {
@@ -92,10 +101,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget _showArticles() {
     return ListView(
       children: [
-        ...articles.map((article) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: ArticleCard(article),
-        )).toList()
+        ...articles
+            .map((article) => Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  child: ArticleCard(article),
+                ))
+            .toList()
       ],
     );
   }

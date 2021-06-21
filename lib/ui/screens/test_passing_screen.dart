@@ -131,6 +131,7 @@ class _TestPassingScreenState extends State<TestPassingScreen> {
   Widget buildHeader(BuildContext context) {
     return Container(
       height: 164,
+      width: MediaQuery.of(context).size.width,
       child: Stack(
         fit: StackFit.passthrough,
         children: [

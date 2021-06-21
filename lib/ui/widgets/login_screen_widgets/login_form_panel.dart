@@ -35,7 +35,13 @@ class _LoginFormPanelState extends State<LoginFormPanel>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 700),
-    );
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        context
+            .read<AuthRepository>()
+            .login(_emailController.text, _passController.text);
+      }
+    });
 
     _emailController = TextEditingController();
     _passController = TextEditingController();
@@ -174,17 +180,16 @@ class _LoginFormPanelState extends State<LoginFormPanel>
                     _isFormEnabled = !_isFormEnabled;
                   });
 
-                  context
-                      .read<AuthRepository>()
-                      .login(_emailController.text, _passController.text);
-
                 }
               },
             ),
           ),
-          TextButton(
-            onPressed: _isFormEnabled ? () {} : null,
-            child: Text('Забыли пароль?'),
+          Opacity(
+            opacity: 0.0,
+            child: TextButton(
+              onPressed: _isFormEnabled ? () {} : null,
+              child: Text('Забыли пароль?'),
+            ),
           ),
         ],
       ),

@@ -31,6 +31,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Упражнения'),
+      ),
       body: BlocProvider(
         create: (context) => ExerciseBloc(
           ExerciseRepository(

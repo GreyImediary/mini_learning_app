@@ -7,4 +7,8 @@ class PageHandler {
   void incrementPage() {
     ++page;
   }
+
+  void reset() {
+    page = 1;
+  }
 }

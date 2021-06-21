@@ -23,10 +23,12 @@ class ArticleDetailedScreen extends StatefulWidget {
 
 class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
   late final YoutubePlayerController _controller;
+  bool _isPlayerReady = false;
 
   @override
   void initState() {
-    final videoId = YoutubePlayer.convertUrlToId(widget.article.video ?? '') ?? '';
+    final videoId =
+        YoutubePlayer.convertUrlToId(widget.article.video ?? '') ?? '';
     _controller = YoutubePlayerController(
       initialVideoId: videoId,
       flags: YoutubePlayerFlags(
@@ -47,6 +49,11 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
         child: YoutubePlayerBuilder(
           player: YoutubePlayer(
             controller: _controller,
+            onReady: () {
+              setState(() {
+                _isPlayerReady = true;
+              });
+            },
             showVideoProgressIndicator: true,
             progressIndicatorColor: Theme.of(context).colorScheme.secondary,
           ),
@@ -59,7 +66,9 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
                   children: [
                     FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
-                      image: article.imageUrl,
+                      image: article.imageUrl == null
+                          ? 'https://amsrus.ru/wp-content/uploads/2020/06/P90389356_highRes_the-new-mini-cooper-.jpg'
+                          : article.imageUrl!,
                       fit: BoxFit.cover,
                       fadeInDuration: Duration(milliseconds: 400),
                     ),
@@ -103,8 +112,7 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
                                 article.isFavorite
                                     ? Icons.bookmark
                                     : Icons.bookmark_outline,
-                                color:
-                                    Theme.of(context).colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {
                                 if (article.isFavorite) {
@@ -135,14 +143,14 @@ class _ArticleDetailedScreenState extends State<ArticleDetailedScreen> {
   }
 
   _listenUserBloc(UserState state, Article article) {
-    if (state is UserArticleSaveSuccess &&
-        article.id == state.articleId) {
+    if (state is UserArticleSaveSuccess && article.id == state.articleId) {
       setState(() {
         article.isFavorite = true;
       });
     } else if (state is UserArticleSaveFail) {
       showSimpleSnackBar(context, 'Не удалось сохранить статью :(');
-    } else if (state is UserArticleDeleteSuccess && article.id == state.articleId) {
+    } else if (state is UserArticleDeleteSuccess &&
+        article.id == state.articleId) {
       setState(() {
         article.isFavorite = false;
       });

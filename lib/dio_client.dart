@@ -14,7 +14,7 @@ class DioClient {
   static Dio getDio() {
     if (_dio == null) {
       _dio = Dio()
-        ..options.baseUrl = 'http://83.229.84.136:3000/'
+        ..options.baseUrl = 'http://83.229.84.136:3000'
         ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true))
         ..interceptors.add(
           InterceptorsWrapper(
@@ -45,7 +45,7 @@ class DioClient {
   static Dio getTokenDio() {
     if (_tokenDio == null) {
       _tokenDio = Dio()
-        ..options.baseUrl = 'http://83.229.84.136:3000/'
+        ..options.baseUrl = 'http://83.229.84.136:3000'
         ..interceptors.add(LogInterceptor());
 
       return _tokenDio!;

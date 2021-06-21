@@ -73,6 +73,7 @@ class _TestScreenState extends State<TestScreen> {
                     child: SmartRefresher(
                       enablePullUp: true,
                       onRefresh: () {
+                        tests.clear();
                         context.read<TestBloc>().add(TestsReset());
                         _refreshController.refreshCompleted();
                       },

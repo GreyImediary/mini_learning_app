@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_learning_app/bloc/test_screen/test_screen_bloc.dart';
 import 'package:mini_learning_app/bloc/test_screen/test_screen_event.dart';
 import 'package:mini_learning_app/bloc/test_screen/test_screen_state.dart';
+import 'package:mini_learning_app/help_functions/snack_bar_helpers.dart';
 import 'package:mini_learning_app/model/test/option/one_of_option/one_of_option.dart';
 import 'package:mini_learning_app/model/test/question/one_of_question/one_of_question.dart';
 import 'package:mini_learning_app/model/test/question_answer_data/answer_data.dart';
@@ -32,8 +33,7 @@ class _OneOfQuestionWidgetState extends State<OneOfQuestionWidget> {
       listener: (_, state) {
         if (state is TestAnswerAccept) {
           if (_option == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Выберете вариант ответа!')));
+            showSimpleSnackBar(context, 'Выберете вариант ответа!');
           } else {
             context.read<TestScreenBloc>().add(TestAnswerSent(getAnswer()));
             _isCorrectnessShown = true;
@@ -42,6 +42,7 @@ class _OneOfQuestionWidgetState extends State<OneOfQuestionWidget> {
         } else if (state is TestNextQuestion) {
           _isCorrectnessShown = false;
           _isDisabled = false;
+          _option = null;
         }
       },
       child: Column(

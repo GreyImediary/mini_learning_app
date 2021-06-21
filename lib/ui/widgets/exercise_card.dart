@@ -17,7 +17,7 @@ class ExerciseCard extends StatefulWidget {
 class ExerciseCardState extends State<ExerciseCard>
     with SingleTickerProviderStateMixin {
 
-  bool _hasDoneTasks = true;
+  bool _hasDoneTasks = false;
 
   @override
   Widget build(BuildContext context) {

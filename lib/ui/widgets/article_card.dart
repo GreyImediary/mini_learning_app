@@ -90,7 +90,9 @@ class _ArticleCardState extends State<ArticleCard>
                       ),
                       FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
-                        image: article.imageUrl,
+                        image: article.imageUrl == null
+                            ? 'https://amsrus.ru/wp-content/uploads/2020/06/P90389356_highRes_the-new-mini-cooper-.jpg'
+                            : article.imageUrl!,
                         fit: BoxFit.cover,
                         height: 100,
                         fadeInDuration: Duration(milliseconds: 400),

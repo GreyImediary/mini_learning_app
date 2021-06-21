@@ -41,6 +41,10 @@ class TestRepository {
     }
   }
 
+  void resetPage() {
+    pageHandler.reset();
+  }
+
   Future<Test?> getTest(int id) async {
     try {
       final response = await dio.get('/test/$id');
